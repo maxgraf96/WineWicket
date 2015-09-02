@@ -2,39 +2,12 @@
 <html lang="en" xmlns:wicket="http://wicket.apache.org/">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Sign in</title>
+    <link rel="stylesheet" href="signinstyle.css" type="text/css" media="screen" title="Stylesheet" />
 </head>
 <body>
 
-    <span wicket:id = "feedback" />
-
-    <p>
-        <i>Welcome to WineO</i>
-    </p>
-    <form wicket:id = "signInForm">
-        <table>
-            <tr>
-                <td align = "right">
-                    Username:
-                </td>
-                <td>
-                    <input wicket:id="user" type="text" value="foo" size="30"/>
-                </td>
-            </tr>
-            <tr>
-                <td align="right">
-                    Password:
-                </td>
-                <td>
-                    <input wicket:id="password" type="password" value="password" size="30"/>
-                </td>
-            </tr>
-            <tr>
-               <td colspan="2">
-                   <input type="submit" value="Login"/>
-               </td>
-            </tr>
-        </table>
-    </form>
+    <h1>Welcome to WineO</h1>
+    <span wicket:id="signInPanel" />
 </body>
 </html>

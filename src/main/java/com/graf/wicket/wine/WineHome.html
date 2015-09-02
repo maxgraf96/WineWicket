@@ -7,9 +7,32 @@
 		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
 	</head>
 	<body>
-        <main id="main">
-            <h1>Welcome to WineO</h1>
-            <wicket:link><a href="SignIn.html">Logout</a></wicket:link>
+    <div class="backgroundimage">
+
+    </div>
+    <div id="wrapper">
+        <header>
+            <table>
+                <tr>
+                    <td>
+                        <wicket:link><a href="WineHome.html"><h1>WineO</h1></a></wicket:link>
+                    </td>
+                    <td class="titlebar">
+                        <wicket:link><a href="About.html">About</a></wicket:link>
+                    </td>
+                </tr>
+            </table>
+        </header>
+        <main>
+            <table>
+                <tr>
+                    <td><h2>Wine list</h2></td>
+                </tr>
+            </table>
         </main>
+        <footer>
+            <wicket:link><a href="SignIn.html" id="logout">Logout</a></wicket:link>
+        </footer>
+    </div>
     </body>
 </html>

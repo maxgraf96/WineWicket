@@ -1,1 +1,54 @@
-body{background: url("Wine_Barrels.jpg");}
+body{
+    font-family: Helvetica;
+    background-image: url("wine_blur.jpg");
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 16px;
+    color: floralwhite;
+
+
+}
+
+h1{
+    font-size: 2em;
+}
+h2{
+    font-size: 1.5em;
+}
+
+#logout{
+    color: floralwhite;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+}
+
+.wrapper{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header,footer{
+    height: 30px;
+}
+
+main{
+    flex: 1;
+    margin-top: 16px;
+}
+.titlebar{
+    padding-left: 16px;
+}
+a:link{
+    color: floralwhite;}
+a:visited{
+    color: #a5e0ff;
+}
+a:hover{
+    color: #c3f1ff
+}
+a:active{
+    color: #a1ccda
+}

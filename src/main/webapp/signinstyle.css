@@ -1,0 +1,13 @@
+body{
+    font-family: Helvetica;
+    background-image: url("wine.jpg");
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 16px;
+    color: floralwhite;
+}
+h1{
+    font-family: Helvetica;
+    font-size: 2em;
+}

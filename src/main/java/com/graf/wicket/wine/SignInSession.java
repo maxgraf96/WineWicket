@@ -38,6 +38,10 @@ public class SignInSession extends AuthenticatedWebSession {
 
     @Override
     public Roles getRoles(){
+        if(isSignedIn()){
+            //Give user admin role
+            return new Roles(Roles.ADMIN);
+        }
         return null;
     }
 
