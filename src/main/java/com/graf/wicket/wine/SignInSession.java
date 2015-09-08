@@ -32,10 +32,6 @@ public class SignInSession extends AuthenticatedWebSession {
         return user;
     }
 
-    public void setUser(final String user){
-        this.user = user;
-    }
-
     @Override
     public Roles getRoles(){
         if(isSignedIn()){

@@ -2,22 +2,36 @@ package com.graf.wicket.wine;
 
 import org.apache.wicket.util.io.IClusterable;
 
+import java.io.Serializable;
+
 /**
  * Created by Max on 02.09.2015.
  */
 public class Wine implements IClusterable {
-    private String name,ort,winetype,agingPrivate;
-    private int year;
+    private String name,ort,type,agingPrivate;
+    private int id,year;
     private float abHofPrice;
     private boolean bestellbar;
 
     public Wine(){}
     public Wine(final Wine wine){
+        this.id = wine.id;
         this.name = wine.name;
+        this.ort = wine.ort;
+        this.type = wine.type;
+        this.agingPrivate = wine.agingPrivate;
         this.year = wine.year;
+        this.abHofPrice = wine.abHofPrice;
+        this.bestellbar = wine.bestellbar;
     }
 
     //getset
+    public int getId(){
+        return id;
+    }
+    public void setId(int id){
+        this.id = id;
+    }
     public String getName(){
         return name;
     }
@@ -32,11 +46,11 @@ public class Wine implements IClusterable {
         this.ort = ort;
     }
 
-    public String getWinetype(){
-        return winetype;
+    public String getType(){
+        return type;
     }
-    public void setWinetype(String winetype){
-        this.winetype = winetype;
+    public void setType(String winetype){
+        this.type = winetype;
     }
 
     public String getAgingPrivate(){
@@ -49,7 +63,7 @@ public class Wine implements IClusterable {
     public int getYear(){
         return year;
     }
-    public void setYear(){
+    public void setYear(int year){
         this.year = year;
     }
 

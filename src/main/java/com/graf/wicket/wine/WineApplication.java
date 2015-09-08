@@ -13,6 +13,8 @@ import org.apache.wicket.request.component.IRequestableComponent;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 
+import java.io.File;
+
 public class WineApplication extends WebApplication
 {
 	@Override
@@ -31,10 +33,14 @@ public class WineApplication extends WebApplication
 	{
 		super.init();
 
-		// add your configuration here
         //Register the authorization strategy
         getSecuritySettings().setAuthorizationStrategy(new IAuthorizationStrategy() {
-            @Override
+
+            public boolean isActionAuthorized(Component component, Action action) {
+                //authorize everything
+                return true;
+            }
+
             public <T extends IRequestableComponent> boolean isInstantiationAuthorized(Class<T> componentClass) {
                 //Check if the new Page requires authentication
                 if(AuthenticatedWebPage.class.isAssignableFrom(componentClass)){
@@ -53,15 +59,9 @@ public class WineApplication extends WebApplication
             }
 
             @Override
-            public boolean isActionAuthorized(Component component, Action action) {
-                //authorize everything
+            public boolean isResourceAuthorized(IResource iResource, PageParameters pageParameters) {
                 return true;
             }
-
-            @Override
-            public boolean isResourceAuthorized(IResource iResource, PageParameters pageParameters) {
-                return false;
-            }
         });
-	}
+    }
 }

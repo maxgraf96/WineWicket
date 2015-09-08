@@ -15,23 +15,52 @@
             <table>
                 <tr>
                     <td>
-                        <wicket:link><a href="WineHome.html"><h1>WineO</h1></a></wicket:link>
+                        <wicket:link><a href="WineHome.html"><h1>WiO</h1></a></wicket:link>
                     </td>
-                    <td class="titlebar">
-                        <wicket:link><a href="About.html">About</a></wicket:link>
-                    </td>
+                    <td><h1>|</h1></td>
+                    <td><h2>Wine list</h2></td>
                 </tr>
             </table>
         </header>
         <main>
-            <table>
+            <table id="wineTable">
+                <tr><td><p>Your wine list is empty!</p></td></tr>
                 <tr>
-                    <td><h2>Wine list</h2></td>
+                    <td>
+                        <form wicket:id="wineForm">
+                            Add wine:
+                            <p>
+                                <input type="text" wicket:id="name" value="Name" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
+                                <input type="text" wicket:id="ort" value="Herkunftsort" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
+                                <input type="text" wicket:id="type" value="Weintyp" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
+                                <input type="text" wicket:id="year" value="Herstellungsjahr" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
+                                <input type="text" wicket:id="abHofPrice" value="Preis" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
+                                <input type="text" wicket:id="agingPrivate" value="Art der Reife" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
+                                Bestellbar<input type="checkbox" wicket:id="bestellbar" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" />
+                                <input type="submit" value="Add" />
+                            </p>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span wicket:id="wines" id="wines">
+                            <p>
+                                <span wicket:id="name">Name</span><br>
+                                <span wicket:id="ort">Oberwart</span><br>
+                                <span wicket:id="type">Welschriesling</span><br>
+                                <span wicket:id="year">2014</span><br>
+                                <span wicket:id="abHofPrice">7,99</span><br>
+                                <span wicket:id="bestellbar">Ja</span><br>
+                                <span wicket:id="agingPrivate">Fass</span><br>
+                            </p>
+                        </span>
+                    </td>
                 </tr>
             </table>
         </main>
         <footer>
-            <wicket:link><a href="SignIn.html" id="logout">Logout</a></wicket:link>
+            <wicket:link><a href="SignOut.html" id="logout">Logout</a></wicket:link>
         </footer>
     </div>
     </body>
