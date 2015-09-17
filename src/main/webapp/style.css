@@ -1,3 +1,10 @@
+html{
+    width:100vw;
+    height:100vh;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+}
 body{
     font-family: Helvetica;
     background-image: url("wine_blur.jpg");
@@ -5,15 +12,28 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     color: floralwhite;
+    min-height: 100vh;
+    min-width: 100vw;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
 }
 
+#headerTable{
+    position: absolute;
+    top: 50%;
+    transform: translate(0,-50%);
+    margin-left: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
 h1{
     font-size: 2em;
-    margin:2px;
+
 }
 h2{
     font-size: 1.5em;
-    margin:2px;
 }
 
 #wrapper{
@@ -23,11 +43,9 @@ h2{
 }
 
 header{
+    margin:0;
     height: 3em;
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1.5em;
+    width: 100vw;
     /*fallback*/
     background: rgb(0,0,0) transparent;
     background: rgba(0,0,0,0.2);
@@ -40,10 +58,7 @@ header{
 }
 footer{
     height: 3em;
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1.5em;
+    width: 100vw;
     /*fallback*/
     background: rgb(0,0,0) transparent;
     background: rgba(0,0,0,0.2);
@@ -61,20 +76,56 @@ main{
     width: 70%;
     margin-left:auto;
     margin-right:auto;
-
+    margin-top: 1px;
     position: relative;
     z-index: 0;
 }
 
-#wineTable{
-    padding-left: 16px;
+#wineFormContainer{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    text-align: center;
 }
 
 #noWine{
+    text-align: center;
+    line-height: 55px;
+    font-weight: bold;
     background: lemonchiffon;
     color: black;
+    width: 100%;
+    height: 55px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 
+#weinkeller{
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    margin-top: 16px;
+}
+
+#logout{
+    color: floralwhite;
+    /*float: right;*/
+    /*margin-right: 1.5em;*/
+    margin-top: 1em;
+    margin-left: 50vw;
+    float: left;
+}
+
+#debug{
+    z-index: 3;
+}
+
+/* for hiding components via Wicket */
+.hidden{
+    visibility:hidden;
+}
+/* links */
 a:link{
     color: floralwhite;}
 a:visited{
@@ -85,11 +136,4 @@ a:hover{
 }
 a:active{
     color: #a1ccda
-}
-
-#logout{
-    color: floralwhite;
-    float: right;
-    margin-right: 1.5em;
-    margin-top: 1em;
 }

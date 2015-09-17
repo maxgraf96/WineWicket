@@ -7,10 +7,10 @@ import java.io.Serializable;
 /**
  * Created by Max on 02.09.2015.
  */
-public class Wine implements IClusterable {
+public class Wine implements Serializable {
     private String name,ort,type,agingPrivate;
-    private int id,year;
-    private float abHofPrice;
+    private Integer id,year;
+    private Float abHofPrice;
     private boolean bestellbar;
 
     public Wine(){}
@@ -26,12 +26,13 @@ public class Wine implements IClusterable {
     }
 
     //getset
-    public int getId(){
+    public Integer getId(){
         return id;
     }
-    public void setId(int id){
+    public void setId(Integer id){
         this.id = id;
     }
+
     public String getName(){
         return name;
     }
@@ -60,17 +61,17 @@ public class Wine implements IClusterable {
         this.agingPrivate = agingPrivate;
     }
 
-    public int getYear(){
+    public Integer getYear(){
         return year;
     }
-    public void setYear(int year){
+    public void setYear(Integer year){
         this.year = year;
     }
 
-    public float getAbHofPrice(){
+    public Float getAbHofPrice(){
         return abHofPrice;
     }
-    public void setAbHofPrice(float abHofPrice){
+    public void setAbHofPrice(Float abHofPrice){
         this.abHofPrice = abHofPrice;
     }
 

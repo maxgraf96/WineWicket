@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
+<meta name="viewport" content="width=device-width, initial-sacle=1.0">
 	<head>
 		<meta charset="utf-8" />
 		<title>Wine - Home</title>
@@ -7,15 +8,16 @@
 		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
 	</head>
 	<body>
+    <div wicket:id="debug" id="debug"></div>
     <div class="backgroundimage">
 
     </div>
     <div id="wrapper">
         <header>
-            <table>
+            <table id="headerTable">
                 <tr>
                     <td>
-                        <wicket:link><a href="WineHome.html"><h1>WiO</h1></a></wicket:link>
+                        <h1>WiO</h1>
                     </td>
                     <td><h1>|</h1></td>
                     <td><h2>Wine list</h2></td>
@@ -23,41 +25,26 @@
             </table>
         </header>
         <main>
-            <table id="wineTable">
-                <tr><td><p>Your wine list is empty!</p></td></tr>
-                <tr>
-                    <td>
-                        <form wicket:id="wineForm">
-                            Add wine:
-                            <p>
-                                <input type="text" wicket:id="name" value="Name" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
-                                <input type="text" wicket:id="ort" value="Herkunftsort" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
-                                <input type="text" wicket:id="type" value="Weintyp" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
-                                <input type="text" wicket:id="year" value="Herstellungsjahr" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
-                                <input type="text" wicket:id="abHofPrice" value="Preis" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
-                                <input type="text" wicket:id="agingPrivate" value="Art der Reife" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" /><br />
-                                Bestellbar<input type="checkbox" wicket:id="bestellbar" onclick="this.setSelectionRange(0,this.value.length)" onfocus="getElementById('formsubmit').focus();" />
-                                <input type="submit" value="Add" />
-                            </p>
-                        </form>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span wicket:id="wines" id="wines">
-                            <p>
-                                <span wicket:id="name">Name</span><br>
-                                <span wicket:id="ort">Oberwart</span><br>
-                                <span wicket:id="type">Welschriesling</span><br>
-                                <span wicket:id="year">2014</span><br>
-                                <span wicket:id="abHofPrice">7,99</span><br>
-                                <span wicket:id="bestellbar">Ja</span><br>
-                                <span wicket:id="agingPrivate">Fass</span><br>
-                            </p>
-                        </span>
-                    </td>
-                </tr>
-            </table>
+            <div wicket:id="noWine" id="noWine">
+                <p>Your wine list is empty!
+                    <a href="#" onclick="document.getElementById('textname').focus();">Add wine</a></p>
+            </div>
+            <div id="wineFormContainer">
+                <form wicket:id="wineForm">
+                    <input type="text" wicket:id="name" placeholder="Name" id="textname" /><br />
+                    <input type="text" wicket:id="ort" placeholder="Herkunftsort" /><br />
+                    <input type="text" wicket:id="type" placeholder="Weintyp" /><br />
+                    <input type="text" wicket:id="year" placeholder="Herstellungsjahr" /><br />
+                    <input type="text" wicket:id="abHofPrice" placeholder="Preis" /><br />
+                    <input type="text" wicket:id="agingPrivate" placeholder="Art der Reife" /><br />
+                    Bestellbar<input type="checkbox" wicket:id="bestellbar" /><br />
+                    <input type="submit" value="Add" />
+                    <input type="submit" value="Fill" wicket:id="fill" />
+                </form>
+            </div>
+            <div wicket:id="weinkeller" id="weinkeller">
+                <table wicket:id="wineTable"></table>
+            </div>
         </main>
         <footer>
             <wicket:link><a href="SignOut.html" id="logout">Logout</a></wicket:link>

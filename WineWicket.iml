@@ -36,6 +36,9 @@
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.12" level="project" />
     <orderEntry type="library" name="Maven: org.apache.wicket:wicket-auth-roles:7.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.wicket:wicket-extensions:7.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui:7.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-core:7.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.wicket:wicket-devutils:7.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-slf4j-impl:2.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.3" level="project" />
