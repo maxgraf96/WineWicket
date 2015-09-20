@@ -35,6 +35,10 @@ h1{
 h2{
     font-size: 1.5em;
 }
+h3{
+    font-size: 1.2em;
+    margin-left: 1em;
+}
 
 #wrapper{
     height: 100vh;
@@ -120,11 +124,6 @@ main{
 #debug{
     z-index: 3;
 }
-
-/* for hiding components via Wicket */
-.hidden{
-    visibility:hidden;
-}
 /* links */
 a:link{
     color: floralwhite;}
@@ -132,8 +131,8 @@ a:visited{
     color: #a5e0ff;
 }
 a:hover{
-    color: #c3f1ff
+    color: #e5efff;
 }
 a:active{
-    color: #a1ccda
+    color: #a1ccda;
 }

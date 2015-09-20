@@ -1,47 +1,30 @@
 package com.graf.wicket.wine;
 
 import com.googlecode.wicket.jquery.ui.form.button.*;
-import com.googlecode.wicket.jquery.ui.form.button.Button;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.sun.deploy.panel.PropertyTreeModel;
+import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.PageReference;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.devutils.debugbar.DebugBar;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.PropertyListView;
-import org.apache.wicket.markup.html.panel.*;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.util.crypt.StringUtils;
-import org.apache.wicket.util.value.ValueMap;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +38,7 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
     //Form for adding wines
     private WineForm wineForm;
     //Container used to update wines
-    private final WebMarkupContainer weinkeller;
+    public static WebMarkupContainer weinkeller = null;
     //Label for displaying if wine list is empty
     private Label noWine;
     //Wine for checking if wine values are empty
@@ -63,20 +46,46 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
     //Fields for form input
     private TextField nameField,ortField,typeField,agingPrivateField,abHofPriceField,yearField;
     private CheckBox bestellbarCheckBox;
+    //Modal window for displaying wine information
+    public static ModalWindow wineWindow;
+    //Pagereference for wineWindow
+    public static PageReference pageRef;
+    //Behavior for completetly hiding components via CSS
+    AttributeModifier hidden = new AttributeModifier("style","display:none;");
+    //Columns for datatable
+    public static List<IColumn<Wine,String>> columns;
 
     public WineHome(final PageParameters parameters) {
         super(parameters);
+        //Get page reference
+        pageRef = getPageReference();
 
-        //Add debug bar
-        add(new DebugBar("debug"));
-        //Initialize modelWine - must happen before form is added to page
-        //modelWine = new Wine();
+        //Initialize ModalWindwow
+        add(wineWindow = new ModalWindow("wineWindow"));
+        wineWindow.setCookieName("wine-window");
+
         //Add form for adding wine
         wineForm = new WineForm("wineForm");
-        add(wineForm);
+
+        //Add label which displays if winelist is empty
+        noWine = new Label("noWine","Your wine list is empty!");
+        noWine.setOutputMarkupId(true);
+
+        //Hide form if winelist != empty
+        //Hide label if wines were already added
+        if(wineList.size() > 0){
+            noWine.add(hidden);
+            wineForm.add(hidden);
+            add(noWine);
+            add(wineForm);
+        }
+        else {
+            add(noWine);
+            add(wineForm);
+        }
 
         //Prepare DataTable
-        List<IColumn<Wine,String>> columns = new ArrayList<IColumn<Wine,String>>();
+        columns = new ArrayList<IColumn<Wine,String>>();
         columns.add(new PropertyColumn(new Model<String>("Name"),"name","name"));
         columns.add(new PropertyColumn(new Model<String>("Ort"),"ort","ort"));
         columns.add(new PropertyColumn(new Model<String>("Typ"),"type","type"));
@@ -87,61 +96,26 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
 
         //Add datatable container
         weinkeller = new WebMarkupContainer("weinkeller");
-        add(weinkeller.setOutputMarkupId(true));
-
         //Add winetable to weinkeller
         weinkeller.add(new MyDataTable("wineTable",columns,new WineProvider(),10));
+        weinkeller.setOutputMarkupId(true);
+        add(weinkeller);
 
-        wineForm.add(new AjaxFormSubmitBehavior(wineForm, "submit") {
+        //Add link to add wine
+        add(new AjaxLink("addWine") {
             @Override
-            public final void onSubmit(AjaxRequestTarget target) {
-                if(!nameField.getValue().isEmpty() && !ortField.getValue().isEmpty() && !typeField.getValue().isEmpty() &&
-                        !agingPrivateField.getValue().isEmpty() && !abHofPriceField.getValue().isEmpty() &&
-                        !yearField.getValue().isEmpty()) {
-                    Wine wine = wineForm.getModelObject();
-                    myWine = new Wine(wine);
-
-                    //Add wine to list
-                    wineList.add(myWine);
-                    //Hide label
-                    noWine.add(new AttributeModifier("class", "hidden"));
-                    target.add(noWine);
-                    //Update datatable
-                    target.add(weinkeller);
-
-                    //Clear
-                    myWine = new Wine();
-                    wine.setName("");
-                    wine.setOrt("");
-                    wine.setType("");
-                    wine.setAgingPrivate("");
-                    wine.setAbHofPrice((float) 0);
-                    wine.setYear(0);
-                    wine.setBestellbar(false);
+            public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+                try{
+                    wineForm.remove(hidden);
+                    ajaxRequestTarget.add(wineForm);
+                    ajaxRequestTarget.appendJavaScript("document.getElementById('textname').focus();");
                 }
-                else{
-                    target.appendJavaScript("alert('Please fill out the wine form completely.');");
+                //Form is not yet hidden
+                catch (IllegalStateException e){
+                    ajaxRequestTarget.appendJavaScript("document.getElementById('textname').focus();");
                 }
-           }
-
-            @Override
-            protected void onError(AjaxRequestTarget target) {
-                target.appendJavaScript("alert('AJAX error!');");
             }
         });
-
-        //Add label which displays if winelist is empty
-        noWine = new Label("noWine","Your wine list is empty!");
-        noWine.setOutputMarkupId(true);
-
-        //Hide label if wines were already added
-        if(wineList.size() > 0){
-            noWine.add(new AttributeModifier("class", "hidden"));
-            add(noWine);
-        }
-        else {
-            add(noWine);
-        }
     }
 
     //Form for adding wine
@@ -208,11 +182,49 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
                     target.add(bestellbarCheckBox);
                 }
             });
+
+            add(new AjaxFormSubmitBehavior(wineForm, "submit") {
+                @Override
+                public final void onSubmit(AjaxRequestTarget target) {
+                    if (!nameField.getValue().isEmpty() && !ortField.getValue().isEmpty() && !typeField.getValue().isEmpty() &&
+                            !agingPrivateField.getValue().isEmpty() && !abHofPriceField.getValue().isEmpty() &&
+                            !yearField.getValue().isEmpty()) {
+                        Wine wine = wineForm.getModelObject();
+                        myWine = new Wine(wine);
+
+                        //Add wine to list
+                        wineList.add(myWine);
+                        //Hide label
+                        noWine.add(new AttributeModifier("style", "display:none;"));
+                        target.add(noWine);
+                        //Update datatable
+                        target.add(weinkeller);
+                        //Hide form
+                        wineForm.add(hidden);
+
+                        //Clear
+                        myWine = new Wine();
+                        wine.setName("");
+                        wine.setOrt("");
+                        wine.setType("");
+                        wine.setAgingPrivate("");
+                        wine.setAbHofPrice((float) 0);
+                        wine.setYear(0);
+                        wine.setBestellbar(false);
+                    } else {
+                        target.appendJavaScript("alert('Please fill out the wine form completely.');");
+                    }
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target) {
+                    target.appendJavaScript("alert('AJAX error!');");
+                }
+            });
         }
     }
 
     public static void clear(){
         wineList.clear();
     }
-
 }

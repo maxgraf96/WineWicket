@@ -16,8 +16,8 @@ public class SignInSession extends AuthenticatedWebSession {
     //returns true if the username and password are correct
     @Override
     public final boolean authenticate(final String username, final String password){
-        final String USER = "max";
-        final String PASS = "password";
+        final String USER = "winzerkönig";
+        final String PASS = "invinoveritas";
 
         if(user == null){
             if(USER.equalsIgnoreCase(username) && PASS.equalsIgnoreCase(password)){

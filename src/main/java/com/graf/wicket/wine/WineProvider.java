@@ -52,7 +52,7 @@ public class WineProvider extends SortableDataProvider {
     class SortableDataProviderComparator implements Comparator<Wine>, Serializable {
         public int compare(final Wine o1, final Wine o2) {
             PropertyModel<Comparable> model1 = new PropertyModel<Comparable>(o1,getSort().getProperty().toString());
-            PropertyModel<Comparable> model2 = new PropertyModel<Comparable>(o2, getSort().getProperty().toString());
+            PropertyModel<Comparable> model2 = new PropertyModel<Comparable>(o2,getSort().getProperty().toString());
 
             int result = model1.getObject().compareTo(model2.getObject());
 

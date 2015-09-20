@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-sacle=1.0">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="winePageStyle.css" type="text/css" media="screen" title="Stylesheet" />
+    <title></title>
+</head>
+<body>
+    <div wicket:id="labels" id="labels">
+        <table>
+            <tr>
+                <td><div wicket:id="ortText"></div></td>
+                <td><div wicket:id="ortLabel"></div></td>
+            </tr>
+            <tr>
+                <td><div wicket:id="typeText"></div></td>
+                <td><div wicket:id="typeLabel"></div></td>
+            </tr>
+            <tr>
+                <td><div wicket:id="yearText"></div></td>
+                <td><div wicket:id="yearLabel"></div></td>
+            </tr>
+            <tr>
+                <td><div wicket:id="abHofPriceText"></div></td>
+                <td><div wicket:id="abHofPriceLabel"></div></td>
+            </tr>
+            <tr>
+                <td><div wicket:id="bestellbarText"></div></td>
+                <td><div wicket:id="bestellbarLabel"></div></td>
+            </tr>
+            <tr>
+                <td><div wicket:id="agingPrivateText"></div></td>
+                <td><div wicket:id="agingPrivateLabel"></div></td>
+            </tr>
+        </table>
+    </div>
+    <form wicket:id="winePageForm" id="winePageForm">
+        <div id="textFields" wicket:id="textFields">
+            <input type="text" wicket:id="name" placeholder="Name" id="textname" /><br />
+            <input type="text" wicket:id="ort" placeholder="Herkunftsort" /><br />
+            <input type="text" wicket:id="type" placeholder="Weintyp" /><br />
+            <input type="text" wicket:id="year" placeholder="Herstellungsjahr" /><br />
+            <input type="text" wicket:id="abHofPrice" placeholder="Preis" /><br />
+            <input type="text" wicket:id="agingPrivate" placeholder="Art der Reife" /><br />
+            <div wicket:id="bestellbarFix"></div><input type="checkbox" wicket:id="bestellbar" /><br />
+        </div>
+        <input type="submit" wicket:id="editsave" value="Edit" />
+        <input type="submit" wicket:id="delete" value="Delete" />
+    </form>
+</body>
+</html>

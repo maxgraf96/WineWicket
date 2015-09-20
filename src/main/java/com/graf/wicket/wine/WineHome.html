@@ -8,8 +8,8 @@
 		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
 	</head>
 	<body>
-    <div wicket:id="debug" id="debug"></div>
     <div class="backgroundimage">
+        <div wicket:id="wineWindow"></div>
 
     </div>
     <div id="wrapper">
@@ -21,13 +21,13 @@
                     </td>
                     <td><h1>|</h1></td>
                     <td><h2>Wine list</h2></td>
+                    <td><h3><a href="#" wicket:id="addWine">+Wine</a></h3></td>
                 </tr>
             </table>
         </header>
         <main>
             <div wicket:id="noWine" id="noWine">
-                <p>Your wine list is empty!
-                    <a href="#" onclick="document.getElementById('textname').focus();">Add wine</a></p>
+                <p>Your wine list is empty.</p>
             </div>
             <div id="wineFormContainer">
                 <form wicket:id="wineForm">
@@ -43,7 +43,7 @@
                 </form>
             </div>
             <div wicket:id="weinkeller" id="weinkeller">
-                <table wicket:id="wineTable"></table>
+                <a href="#"><table wicket:id="wineTable"></table></a>
             </div>
         </main>
         <footer>
