@@ -1,18 +1,13 @@
 package com.graf.wicket.wine;
 
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.oracle.webservices.internal.api.message.PropertySet;
-import com.sun.javafx.sg.prism.NGShape;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.PageReference;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -24,18 +19,20 @@ import org.apache.wicket.model.PropertyModel;
  * Created by Max on 18.09.2015.
  */
 public class WinePage extends WebPage {
+    //Wines for accessing/editing and deleting wine respectively
+    public static Wine modelWine, closeWine;
     //Fields for form input
-    public TextField nameField, ortField, typeField, agingPrivateField, abHofPriceField, yearField;
+    public TextField<String> nameField, ortField, typeField, agingPrivateField;
+    public TextField<Float> abHofPriceField;
+    public TextField<Integer> yearField;
     private CheckBox bestellbarCheckBox;
     //Labels for wine data
-    private Label ort, type, agingPrivate, year, abHofPrice, bestellbar, ortText, typeText,agingPrivateText;
-    private Label yearText, abHofPriceText, bestellbarText, bestellbarFix;
+    private Label ort, type, agingPrivate, year, abHofPrice, bestellbar, ortText, typeText, agingPrivateText,
+            yearText, abHofPriceText, bestellbarText, bestellbarFix;
     //Containers for easy access
-    private WebMarkupContainer labels,textfields;
+    private WebMarkupContainer labels, textfields;
     //Form for editing wine
     private Form<Wine> winePageForm;
-    //Wines for accessing/editing and deleting wine respectively
-    public static Wine modelWine,closeWine;
     //Boolean for checking if user is viewing/editing the wine
     private boolean viewing = true;
 
@@ -48,15 +45,15 @@ public class WinePage extends WebPage {
         labels = new WebMarkupContainer("labels");
         labels.setOutputMarkupId(true);
         labels.add(ort = new Label("ortLabel", new PropertyModel<Wine>(modelWine, "ort")));
-        labels.add(type = new Label("typeLabel", new PropertyModel<Wine>(modelWine,"type")));
-        labels.add(agingPrivate = new Label("agingPrivateLabel", new PropertyModel<Wine>(modelWine,"agingPrivate")));
-        labels.add(year = new Label("yearLabel", new PropertyModel<Wine>(modelWine,"year")));
-        labels.add(abHofPrice = new Label("abHofPriceLabel", new PropertyModel<Wine>(modelWine,"abHofPrice")));
-        labels.add(bestellbar = new Label("bestellbarLabel", new PropertyModel<Wine>(modelWine,"bestellbar")));
-        //endregion
+        labels.add(type = new Label("typeLabel", new PropertyModel<Wine>(modelWine, "type")));
+        labels.add(agingPrivate = new Label("agingPrivateLabel", new PropertyModel<Wine>(modelWine, "agingPrivate")));
+        labels.add(year = new Label("yearLabel", new PropertyModel<Wine>(modelWine, "year")));
+        labels.add(abHofPrice = new Label("abHofPriceLabel", new PropertyModel<Wine>(modelWine, "abHofPrice")));
+        labels.add(bestellbar = new Label("bestellbarLabel", new PropertyModel<Wine>(modelWine, "bestellbar")));
+        //endregion labels for displaying dynamic wine values
 
         //region labels for displaying static wine attribute descriptors
-        labels.add(ortText = new Label("ortText",Model.of("Ort")));
+        labels.add(ortText = new Label("ortText", Model.of("Ort")));
         labels.add(typeText = new Label("typeText", Model.of("Typ")));
         labels.add(agingPrivateText = new Label("agingPrivateText", Model.of("Art der Reife")));
         labels.add(yearText = new Label("yearText", Model.of("Jahr")));
@@ -79,37 +76,33 @@ public class WinePage extends WebPage {
         //String for submit button value
         String btnvalue = "Edit";
 
-        public String getEdit(){
-            return btnvalue;
-        }
-
         public WinePageForm(final String id) {
-            super(id, new CompoundPropertyModel<Wine>(modelWine));
+            super(id, new CompoundPropertyModel(modelWine));
             setMarkupId("winePageForm");
 
             //region entryfields
             //Add entry fields
-            nameField = new TextField<String>("name");
+            nameField = new TextField("name");
             nameField.setType(String.class);
             nameField.setOutputMarkupId(true);
 
-            ortField = new TextField<String>("ort");
+            ortField = new TextField("ort");
             ortField.setType(String.class);
             ortField.setOutputMarkupId(true);
 
-            typeField = new TextField<String>("type");
+            typeField = new TextField("type");
             typeField.setType(String.class);
             typeField.setOutputMarkupId(true);
 
-            agingPrivateField = new TextField<String>("agingPrivate");
+            agingPrivateField = new TextField("agingPrivate");
             agingPrivateField.setType(String.class);
             agingPrivateField.setOutputMarkupId(true);
 
-            abHofPriceField = new TextField<Float>("abHofPrice");
+            abHofPriceField = new TextField("abHofPrice");
             abHofPriceField.setType(Float.class);
             abHofPriceField.setOutputMarkupId(true);
 
-            yearField = new TextField<Integer>("year");
+            yearField = new TextField("year");
             yearField.setType(Integer.class);
             yearField.setOutputMarkupId(true);
 
@@ -118,7 +111,7 @@ public class WinePage extends WebPage {
             bestellbarCheckBox.setOutputMarkupId(true);
 
             //Add label which only show the text "Bestellbar" next to check box
-            bestellbarFix = new Label("bestellbarFix",Model.of("Bestellbar"));
+            bestellbarFix = new Label("bestellbarFix", Model.of("Bestellbar"));
             bestellbarFix.setOutputMarkupId(true);
             //endregion
 
@@ -171,7 +164,7 @@ public class WinePage extends WebPage {
                     }
                 }
             });
-            //endregion
+            //endregion editsave button
 
             //region delete button
             add(new AjaxButton("delete", winePageForm) {
@@ -182,6 +175,11 @@ public class WinePage extends WebPage {
                 }
             });
             //endregion
+        }
+
+        //Getter for edit button
+        public String getEdit() {
+            return btnvalue;
         }
     }
 }

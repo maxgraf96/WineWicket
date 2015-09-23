@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class WineProvider extends SortableDataProvider {
 
-    private List<Wine> list = new ArrayList<Wine>();
+    private List<Wine> list = new ArrayList();
     private SortableDataProviderComparator comparator = new SortableDataProviderComparator();
 
     public WineProvider() {
@@ -27,7 +27,7 @@ public class WineProvider extends SortableDataProvider {
     public Iterator<Wine> iterator(final long first, final long count) {
 
         // Get the data
-        List<Wine> newList = new ArrayList<Wine>(list);
+        List<Wine> newList = new ArrayList(list);
 
         // Sort the data
         Collections.sort(newList, comparator);
@@ -51,8 +51,8 @@ public class WineProvider extends SortableDataProvider {
 
     class SortableDataProviderComparator implements Comparator<Wine>, Serializable {
         public int compare(final Wine o1, final Wine o2) {
-            PropertyModel<Comparable> model1 = new PropertyModel<Comparable>(o1,getSort().getProperty().toString());
-            PropertyModel<Comparable> model2 = new PropertyModel<Comparable>(o2,getSort().getProperty().toString());
+            PropertyModel<Comparable<Comparable>> model1 = new PropertyModel(o1, getSort().getProperty().toString());
+            PropertyModel<Comparable> model2 = new PropertyModel(o2, getSort().getProperty().toString());
 
             int result = model1.getObject().compareTo(model2.getObject());
 
