@@ -1,15 +1,17 @@
 package com.graf.wicket.wine;
 
 import com.googlecode.wicket.jquery.ui.form.button.*;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Page;
-import org.apache.wicket.PageReference;
+import org.apache.wicket.*;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.form.*;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -19,6 +21,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.*;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -37,10 +40,14 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
     public static final List<Wine> wineList = Collections.synchronizedList(new ArrayList<Wine>());
     //Form for adding wines
     private WineForm wineForm;
+    //Container for wine form
+    private WebMarkupContainer wineFormContainer;
     //Container used to update wines
     public static WebMarkupContainer weinkeller = null;
     //Label for displaying if wine list is empty
     private Label noWine;
+    //Static Label for display above wineForm
+    private Label addWineText;
     //Wine for checking if wine values are empty
     private Wine myWine,modelWine = new Wine();
     //Fields for form input
@@ -52,6 +59,14 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
     public static PageReference pageRef;
     //Behavior for completetly hiding components via CSS
     AttributeModifier hidden = new AttributeModifier("style","display:none;");
+    //Behavior for blurring body when needed eg. adding wine, modal window
+    public static AttributeAppender blur = new AttributeAppender("style",
+            "    -webkit-filter: blur(14px);\n" +
+            "    -moz-filter: blur(14px);\n" +
+            "    filter: blur(14px);"
+            );
+    //Webmarkupcontainer for blurring body
+    public static WebMarkupContainer bodyContainer;
     //Columns for datatable
     public static List<IColumn<Wine,String>> columns;
 
@@ -64,8 +79,18 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
         add(wineWindow = new ModalWindow("wineWindow"));
         wineWindow.setCookieName("wine-window");
 
+        //Add Label for static display above wine form
+        addWineText = new Label("addWineText",Model.of("Add wine"));
+
         //Add form for adding wine
         wineForm = new WineForm("wineForm");
+
+        //Initialize wineFormContainer
+        wineFormContainer = new WebMarkupContainer("wineFormContainer"){};
+        wineFormContainer.setOutputMarkupId(true);
+        wineFormContainer.add(wineForm);
+        wineFormContainer.add(addWineText);
+        wineFormContainer.add(hidden);
 
         //Add label which displays if winelist is empty
         noWine = new Label("noWine","Your wine list is empty!");
@@ -75,13 +100,13 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
         //Hide label if wines were already added
         if(wineList.size() > 0){
             noWine.add(hidden);
-            wineForm.add(hidden);
             add(noWine);
-            add(wineForm);
+            add(wineFormContainer);
         }
         else {
             add(noWine);
-            add(wineForm);
+            //Show wineForm only when user clicks on +Wine
+            add(wineFormContainer);
         }
 
         //Prepare DataTable
@@ -97,25 +122,34 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
         //Add datatable container
         weinkeller = new WebMarkupContainer("weinkeller");
         //Add winetable to weinkeller
-        weinkeller.add(new MyDataTable("wineTable",columns,new WineProvider(),10));
+        weinkeller.add(new MyDataTable("wineTable", columns, new WineProvider(), 10));
         weinkeller.setOutputMarkupId(true);
         add(weinkeller);
 
-        //Add link to add wine
-        add(new AjaxLink("addWine") {
-            @Override
-            public void onClick(AjaxRequestTarget ajaxRequestTarget) {
-                try{
-                    wineForm.remove(hidden);
-                    ajaxRequestTarget.add(wineForm);
-                    ajaxRequestTarget.appendJavaScript("document.getElementById('textname').focus();");
-                }
-                //Form is not yet hidden
-                catch (IllegalStateException e){
-                    ajaxRequestTarget.appendJavaScript("document.getElementById('textname').focus();");
-                }
-            }
-        });
+        bodyContainer = new WebMarkupContainer("bodyContainer");
+        bodyContainer.add(wineWindow);
+        bodyContainer.add(//Add link to add wine
+                new AjaxLink("addWine") {
+                    @Override
+                    public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+                        try {
+                            //Blur body
+                            bodyContainer.add(blur);
+                            ajaxRequestTarget.add(bodyContainer);
+                            wineFormContainer.remove(hidden);
+                            ajaxRequestTarget.add(wineFormContainer);
+                            ajaxRequestTarget.appendJavaScript("document.getElementById('textname').focus();");
+                        }
+                        //Form is visible
+                        catch (IllegalStateException e) {
+                            ajaxRequestTarget.appendJavaScript("document.getElementById('textname').focus();");
+                        }
+                    }
+                });
+        bodyContainer.add(noWine);
+        bodyContainer.add(weinkeller);
+        bodyContainer.setOutputMarkupId(true);
+        add(bodyContainer);
     }
 
     //Form for adding wine
@@ -165,6 +199,22 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
 
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    nameField.clearInput();
+                    ortField.clearInput();
+                    typeField.clearInput();
+                    yearField.clearInput();
+                    abHofPriceField.clearInput();
+                    agingPrivateField.clearInput();
+                    bestellbarCheckBox.clearInput();
+
+                    target.add(nameField);
+                    target.add(ortField);
+                    target.add(typeField);
+                    target.add(yearField);
+                    target.add(abHofPriceField);
+                    target.add(agingPrivateField);
+                    target.add(bestellbarCheckBox);
+
                     modelWine.setName("Muskat");
                     modelWine.setOrt("Fels\u0151-Magyarorsz\u00e1g");
                     modelWine.setType("Muskat-Ottonel");
@@ -181,8 +231,18 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
                     target.add(agingPrivateField);
                     target.add(bestellbarCheckBox);
                 }
-            });
+            }.setDefaultFormProcessing(false));
+            add(new AjaxButton("cancel",wineForm) {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    setResponsePage(WineHome.class);
+                }
 
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    setResponsePage(WineHome.class);
+                }
+            });
             add(new AjaxFormSubmitBehavior(wineForm, "submit") {
                 @Override
                 public final void onSubmit(AjaxRequestTarget target) {
@@ -200,7 +260,7 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
                         //Update datatable
                         target.add(weinkeller);
                         //Hide form
-                        wineForm.add(hidden);
+                        wineFormContainer.add(hidden);
 
                         //Clear
                         myWine = new Wine();
@@ -211,6 +271,9 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
                         wine.setAbHofPrice((float) 0);
                         wine.setYear(0);
                         wine.setBestellbar(false);
+
+                        //Unblur
+                        bodyContainer.remove(blur);
                     } else {
                         target.appendJavaScript("alert('Please fill out the wine form completely.');");
                     }
@@ -218,7 +281,7 @@ public class WineHome extends WebPage implements AuthenticatedWebPage {
 
                 @Override
                 protected void onError(AjaxRequestTarget target) {
-                    target.appendJavaScript("alert('AJAX error!');");
+                    target.appendJavaScript("alert('AJAX error! Please check form for invalid input.');");
                 }
             });
         }

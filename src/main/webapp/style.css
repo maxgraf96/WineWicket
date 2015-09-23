@@ -12,8 +12,6 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     color: floralwhite;
-    min-height: 100vh;
-    min-width: 100vw;
     margin: 0px;
     padding: 0px;
     overflow-x: hidden;
@@ -44,6 +42,12 @@ h3{
     height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+#bodyContainer{
+    position: absolute;
+    top:0;
+    left:0;
 }
 
 header{
@@ -86,10 +90,33 @@ main{
 }
 
 #wineFormContainer{
+    width: 28vw;
+    height: 40vh;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 16px;
-    text-align: center;
+    margin-top: 15vh;
+    position: relative;
+    z-index: 10;
+    background: rgba(0,0,0,0.2);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#wineForm{
+    position: absolute;
+    left: 25%;
+    top:25%;
+    z-index: 15;
+    opacity: 0.99;
+}
+
+#addWineText{
+    position: absolute;
+    width: 100%;
+    text-align:center;
+    top: 7%;
+    font-size: 1.5em;
 }
 
 #noWine{
@@ -106,10 +133,13 @@ main{
 }
 
 #weinkeller{
-    margin-left: auto;
-    margin-right: auto;
-    width: 40%;
-    margin-top: 16px;
+    margin-top: 5vh;
+}
+
+#wineTable{
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
 }
 
 #logout{
@@ -120,15 +150,13 @@ main{
     margin-left: 50vw;
     float: left;
 }
-
-#debug{
-    z-index: 3;
-}
 /* links */
 a:link{
-    color: floralwhite;}
+    color: floralwhite;
+    text-decoration: none;
+}
 a:visited{
-    color: #a5e0ff;
+    color: floralwhite;
 }
 a:hover{
     color: #e5efff;

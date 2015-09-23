@@ -10,16 +10,11 @@ body{
     color: floralwhite;
     overflow-x: hidden;
 }
-#labels{
-    width:200px;
-    
 
+#labels{
+    text-align: center;
 }
-#textFields{
-    width: 200px;
-    
-}
-#winePageForm{
-    width: 200px;
-    margin-left: 30px;
+
+#winePageFormContainer{
+    text-align: center;
 }

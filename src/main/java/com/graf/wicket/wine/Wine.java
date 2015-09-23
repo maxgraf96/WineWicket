@@ -24,6 +24,16 @@ public class Wine implements Serializable {
         this.abHofPrice = wine.abHofPrice;
         this.bestellbar = wine.bestellbar;
     }
+    public Wine(int clean){
+        setName(null);
+        setId(null);
+        setOrt(null);
+        setType(null);
+        setAgingPrivate(null);
+        setYear(null);
+        setAbHofPrice(null);
+        setBestellbar(false);
+    }
 
     //getset
     public Integer getId(){

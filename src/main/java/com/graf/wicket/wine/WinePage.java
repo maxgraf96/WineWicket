@@ -7,6 +7,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -46,7 +47,7 @@ public class WinePage extends WebPage {
         //Put all labels into one Container for easy access
         labels = new WebMarkupContainer("labels");
         labels.setOutputMarkupId(true);
-        labels.add(ort = new Label("ortLabel", new PropertyModel<Wine>(modelWine,"ort")));
+        labels.add(ort = new Label("ortLabel", new PropertyModel<Wine>(modelWine, "ort")));
         labels.add(type = new Label("typeLabel", new PropertyModel<Wine>(modelWine,"type")));
         labels.add(agingPrivate = new Label("agingPrivateLabel", new PropertyModel<Wine>(modelWine,"agingPrivate")));
         labels.add(year = new Label("yearLabel", new PropertyModel<Wine>(modelWine,"year")));
@@ -65,7 +66,9 @@ public class WinePage extends WebPage {
 
         winePageForm = new WinePageForm("winePageForm");
         winePageForm.setOutputMarkupId(true);
+        winePageForm.add(new AttributeAppender("style", "width:30%;margin-left:auto;margin-right:auto;margin-top:5vh;"));
         add(winePageForm);
+        labels.add(new AttributeAppender("style", "width:30%;margin-left:auto;margin-right:auto;margin-top:5vh;"));
         add(labels);
     }
 

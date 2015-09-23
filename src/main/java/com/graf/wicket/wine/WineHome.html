@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<meta name="viewport" content="width=device-width, initial-sacle=1.0">
+<meta name="viewport" content="width=device-width, height=device-height, initial-sacle=1.0">
 	<head>
 		<meta charset="utf-8" />
 		<title>Wine - Home</title>
@@ -8,47 +8,50 @@
 		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
 	</head>
 	<body>
-    <div class="backgroundimage">
-        <div wicket:id="wineWindow"></div>
-
+    <div wicket:id="wineFormContainer" id="wineFormContainer">
+        <span id="addWineText" wicket:id="addWineText"></span>
+        <form wicket:id="wineForm" id="wineForm">
+            <input type="text" wicket:id="name" placeholder="Name" id="textname" /><br />
+            <input type="text" wicket:id="ort" placeholder="Herkunftsort" /><br />
+            <input type="text" wicket:id="type" placeholder="Weintyp" /><br />
+            <input type="text" wicket:id="year" placeholder="Herstellungsjahr" /><br />
+            <input type="text" wicket:id="abHofPrice" placeholder="Preis" /><br />
+            <input type="text" wicket:id="agingPrivate" placeholder="Art der Reife" /><br />
+            Bestellbar<input type="checkbox" wicket:id="bestellbar" /><br />
+            <input type="submit" value="Add" />
+            <input type="submit" value="Fill" wicket:id="fill" />
+            <input type="reset" value="Cancel" wicket:id="cancel" />
+        </form>
     </div>
-    <div id="wrapper">
-        <header>
-            <table id="headerTable">
-                <tr>
-                    <td>
-                        <h1>WiO</h1>
-                    </td>
-                    <td><h1>|</h1></td>
-                    <td><h2>Wine list</h2></td>
-                    <td><h3><a href="#" wicket:id="addWine">+Wine</a></h3></td>
-                </tr>
-            </table>
-        </header>
-        <main>
-            <div wicket:id="noWine" id="noWine">
-                <p>Your wine list is empty.</p>
-            </div>
-            <div id="wineFormContainer">
-                <form wicket:id="wineForm">
-                    <input type="text" wicket:id="name" placeholder="Name" id="textname" /><br />
-                    <input type="text" wicket:id="ort" placeholder="Herkunftsort" /><br />
-                    <input type="text" wicket:id="type" placeholder="Weintyp" /><br />
-                    <input type="text" wicket:id="year" placeholder="Herstellungsjahr" /><br />
-                    <input type="text" wicket:id="abHofPrice" placeholder="Preis" /><br />
-                    <input type="text" wicket:id="agingPrivate" placeholder="Art der Reife" /><br />
-                    Bestellbar<input type="checkbox" wicket:id="bestellbar" /><br />
-                    <input type="submit" value="Add" />
-                    <input type="submit" value="Fill" wicket:id="fill" />
-                </form>
-            </div>
-            <div wicket:id="weinkeller" id="weinkeller">
-                <a href="#"><table wicket:id="wineTable"></table></a>
-            </div>
-        </main>
-        <footer>
-            <wicket:link><a href="SignOut.html" id="logout">Logout</a></wicket:link>
-        </footer>
+    <div wicket:id="bodyContainer" id="bodyContainer">
+        <div class="backgroundimage">
+            <div wicket:id="wineWindow"></div>
+        </div>
+        <div id="wrapper">
+            <header>
+                <table id="headerTable">
+                    <tr>
+                        <td>
+                            <h1>WiO</h1>
+                        </td>
+                        <td><h1>|</h1></td>
+                        <td><h2>Wine list</h2></td>
+                        <td><h3><a wicket:id="addWine">+Wine</a></h3></td>
+                    </tr>
+                </table>
+            </header>
+            <main>
+                <div wicket:id="noWine" id="noWine">
+                    <p>Your wine list is empty.</p>
+                </div>
+                <div wicket:id="weinkeller" id="weinkeller">
+                    <a href="#"><table wicket:id="wineTable" id="wineTable"></table></a>
+                </div>
+            </main>
+            <footer>
+                <wicket:link><a href="SignOut.html" id="logout">Logout</a></wicket:link>
+            </footer>
+        </div>
     </div>
     </body>
 </html>

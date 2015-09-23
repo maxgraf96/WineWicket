@@ -32,6 +32,8 @@ public class MyDataTable<T,S> extends DefaultDataTable<T,S> {
         rowItem.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
+                //Blur body
+                target.add(WineHome.bodyContainer.add(WineHome.blur));
                 //Get wine
                 final Wine wine = WineHome.wineList.get(WineHome.wineList.indexOf(rowItem.getModelObject()));
                 ww.setPageCreator(new ModalWindow.PageCreator() {
@@ -49,6 +51,9 @@ public class MyDataTable<T,S> extends DefaultDataTable<T,S> {
                     }
                 });
                 ww.setTitle(wine.getName());
+                ww.setResizable(false);
+                ww.setInitialWidth(500);
+                ww.setInitialHeight(300);
                 ww.show(target);
             }
 
